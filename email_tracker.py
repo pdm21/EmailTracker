@@ -1,4 +1,4 @@
-from email_auth2 import authenticate_gmail
+from email_auth import authenticate_gmail
 
 def fetch_unique_senders(service):
     """Fetch unique senders from the last 100 emails."""
