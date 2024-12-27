@@ -1,6 +1,6 @@
 from email_auth import authenticate_gmail
 
-def fetch_recent_emails(service, max_results=100):
+def fetch_recent_emails(service, max_results=20):
     """Fetch recent emails and list their senders."""
     results = service.users().messages().list(userId='me', maxResults=max_results).execute()
     messages = results.get('messages', [])

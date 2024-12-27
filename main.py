@@ -1,8 +1,5 @@
-import webbrowser
-from threading import Thread
 from email_auth import authenticate_gmail
-from email_utils import fetch_recent_emails, fetch_emails_from_sender
-from email_server import start_server
+from email_utils import fetch_recent_emails, fetch_emails_from_sender, get_or_create_label, move_emails_to_label
 
 def main():
     service = authenticate_gmail()
@@ -18,8 +15,8 @@ def main():
     senders = {}
     for idx, email in enumerate(emails):
         sender = email['sender']
-        print(f"{idx + 1}. {sender}")
-        senders[idx + 1] = sender
+        print(f"{idx + 1}. Sender: {sender}, Subject: {email['subject']}")
+        senders[idx + 1] = email
 
     # Prompt user to select a sender
     try:
@@ -27,25 +24,26 @@ def main():
         if choice not in senders:
             print("Invalid choice.")
             return
-        selected_sender = senders[choice]
+        selected_email = senders[choice]
+        sender_email = selected_email['sender']
     except ValueError:
         print("Please enter a valid number.")
         return
 
     # Fetch emails from the selected sender
-    email_ids = fetch_emails_from_sender(service, selected_sender)
-    if not email_ids:
-        print(f"No emails found for {selected_sender}.")
+    message_ids = fetch_emails_from_sender(service, sender_email)
+    if not message_ids:
+        print(f"No emails found from {sender_email}.")
         return
 
-    print(f"\nDisplaying email from {selected_sender}...")
+    # Get or create the label
+    label_id = get_or_create_label(service, "EmailTracker/Unsubscribe")
 
-    # Start the Flask server
-    server_thread = Thread(target=start_server)
-    server_thread.start()
+    # Move emails to the label
+    print(f"Moving {len(message_ids)} emails from {sender_email} to 'EmailTracker/Unsubscribe' and removing them from the inbox...")
+    move_emails_to_label(service, message_ids, label_id)
 
-    # Open the first email in the browser
-    webbrowser.open(f'http://127.0.0.1:5000/email/{email_ids[0]}')
+    print("Emails moved successfully!")
 
 if __name__ == '__main__':
     main()
