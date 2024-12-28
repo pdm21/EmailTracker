@@ -25,3 +25,7 @@ ENV/
 
 # Logs
 *.log
+
+# Go Support Files
+go.mod
+go.sum
