@@ -3,7 +3,13 @@ import base64
 
 def fetch_recent_emails(service, max_results=20):
     """Fetch recent emails and list their senders."""
-    results = service.users().messages().list(userId='me', maxResults=max_results).execute()
+    # Exclude emails with the 'EmailTracker/Unsubscribe' label
+    exclude_label = "label:EmailTracker/Unsubscribe"
+
+    # Add a query to fetch only inbox emails excluding already processed ones
+    query = f"in:inbox -{exclude_label}"
+    
+    results = service.users().messages().list(userId='me', maxResults=max_results, q=query).execute()
     messages = results.get('messages', [])
 
     if not messages:
