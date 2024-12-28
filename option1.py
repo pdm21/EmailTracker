@@ -1,6 +1,8 @@
-from email_auth import authenticate_gmail
-from email_utils import fetch_recent_emails, fetch_emails_from_sender, get_or_create_label, move_emails_to_label
-from filters import create_filter_for_sender
+from utils.email_auth import authenticate_gmail
+from utils.email_fetch import fetch_recent_emails, fetch_emails_from_sender
+from utils.label_utils import get_or_create_label
+from utils.email_move import move_emails_to_label
+from utils.filters import create_filter_for_sender
 
 def option1():
     service = authenticate_gmail()

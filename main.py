@@ -1,6 +1,6 @@
 import subprocess
-from email_auth import authenticate_gmail
-from email_utils import fetch_recent_emails
+from utils.email_auth import authenticate_gmail
+from utils.email_fetch import fetch_recent_emails
 from option1 import option1
 from option2 import option2
 
