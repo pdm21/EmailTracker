@@ -31,6 +31,7 @@ def fetch_recent_emails(service, max_results=20):
 
     return email_list
 
+
 def fetch_emails_from_sender(service, sender_email):
     """Fetch the IDs of emails from a specific sender."""
     query = f"from:{sender_email}"
